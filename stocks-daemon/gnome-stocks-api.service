@@ -1,0 +1,13 @@
+[Unit]
+Description=GNOME Stocks API Server (Phase 2)
+After=network.target gnome-stocks-daemon.service
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 %h/Documents/NN/stock-extension-widget/stocks-daemon/api_server.py
+Restart=on-failure
+RestartSec=10
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=default.target

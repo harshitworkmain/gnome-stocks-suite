@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist>
+  <schema id="org.gnome.shell.extensions.stocks" path="/org/gnome/shell/extensions/stocks/">
+
+    <!-- Panel -->
+    <key name="panel-position" type="s">
+      <default>'right'</default>
+      <summary>Panel position</summary>
+      <description>Where to place the indicator: 'left', 'center', or 'right'.</description>
+    </key>
+    <key name="max-visible-items" type="i">
+      <default>3</default>
+      <summary>Max visible items</summary>
+      <description>Maximum tickers shown at once in the panel (1–5).</description>
+    </key>
+    <key name="rotation-interval" type="i">
+      <default>4</default>
+      <summary>Rotation interval (seconds)</summary>
+      <description>Seconds between ticker rotation (2–15).</description>
+    </key>
+    <key name="enable-rotation" type="b">
+      <default>true</default>
+      <summary>Enable rotation</summary>
+      <description>Rotate through symbols in the panel when there are more than max-visible.</description>
+    </key>
+    <key name="pinned-symbols" type="as">
+      <default>[]</default>
+      <summary>Pinned symbols</summary>
+      <description>Symbols always shown in panel, never rotated out.</description>
+    </key>
+
+    <!-- Display -->
+    <key name="show-currency" type="b">
+      <default>true</default>
+      <summary>Show currency symbols</summary>
+      <description>Prefix prices with $ or ₹.</description>
+    </key>
+    <key name="show-change-percent" type="b">
+      <default>true</default>
+      <summary>Show % change</summary>
+      <description>Show percentage change in panel and popup.</description>
+    </key>
+    <key name="show-time" type="b">
+      <default>true</default>
+      <summary>Show update time</summary>
+      <description>Show last update time in popup rows.</description>
+    </key>
+
+    <!-- Appearance -->
+    <key name="compact-mode" type="b">
+      <default>false</default>
+      <summary>Compact mode</summary>
+      <description>Smaller font and tighter spacing in panel.</description>
+    </key>
+
+    <!-- Debug -->
+    <key name="debug" type="b">
+      <default>false</default>
+      <summary>Enable debug logging</summary>
+      <description>Print debug messages to the journal.</description>
+    </key>
+
+  </schema>
+</schemalist>

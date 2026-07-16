@@ -1,0 +1,199 @@
+/* ─── Panel ──────────────────────────────────────────────────────── */
+.stock-panel-box {
+    padding: 0 8px;
+}
+
+.stock-panel-label {
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 4px;
+}
+
+.stock-panel-compact {
+    font-size: 11px;
+    margin: 0 2px;
+}
+
+/* ─── Popup ──────────────────────────────────────────────────────── */
+.stock-popup-header {
+    padding: 4px 0;
+}
+
+.stock-popup-title {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+/* ─── Search ─────────────────────────────────────────────────────── */
+.stock-search-entry {
+    min-width: 220px;
+    margin-right: 6px;
+    border-radius: 6px;
+}
+
+.stock-add-btn {
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-weight: bold;
+}
+
+.stock-add-btn:hover {
+    background-color: rgba(74, 222, 128, 0.2);
+    color: #4ade80;
+}
+
+/* ─── Quotes List ────────────────────────────────────────────────── */
+.stock-items-box {
+    padding: 2px 0;
+}
+
+.stock-popup-row {
+    margin: 0 8px;
+    padding: 6px 4px;
+    border-radius: 6px;
+    transition-duration: 150ms;
+}
+
+.stock-popup-row-hover {
+    background-color: rgba(255, 255, 255, 0.06);
+}
+
+.stock-popup-row-border {
+    border-bottom-width: 1px;
+    border-bottom-color: rgba(255, 255, 255, 0.06);
+}
+
+/* Pin button */
+.stock-pin-btn {
+    padding: 2px 6px;
+    margin-right: 4px;
+    border-radius: 4px;
+    color: #64748b;
+    font-size: 0.9em;
+}
+
+.stock-pin-btn:hover {
+    color: #facc15;
+}
+
+.stock-pinned {
+    color: #facc15;
+}
+
+/* Symbol */
+.stock-popup-symbol {
+    font-weight: bold;
+    min-width: 110px;
+    font-family: monospace;
+}
+
+/* Price */
+.stock-popup-price {
+    min-width: 90px;
+    text-align: right;
+    font-family: monospace;
+}
+
+/* Change */
+.stock-popup-change {
+    min-width: 80px;
+    text-align: right;
+    font-family: monospace;
+    margin-left: 8px;
+}
+
+.stock-up {
+    color: #4ade80;
+}
+
+.stock-down {
+    color: #f87171;
+}
+
+/* Time */
+.stock-popup-time {
+    color: #94a3b8;
+    font-size: 0.8em;
+    min-width: 55px;
+    text-align: right;
+    margin-left: 8px;
+}
+
+/* Remove button */
+.stock-remove-btn {
+    padding: 2px 8px;
+    margin-left: 6px;
+    border-radius: 4px;
+    color: #64748b;
+}
+
+.stock-remove-btn:hover {
+    color: #f87171;
+    background-color: rgba(248, 113, 113, 0.15);
+}
+
+/* ─── Status ─────────────────────────────────────────────────────── */
+.stock-popup-status {
+    color: #64748b;
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+.stock-popup-empty {
+    color: #94a3b8;
+    font-style: italic;
+    padding: 8px;
+}
+
+/* ─── Phase 3b: Autocomplete Dropdown ────────────────────────────── */
+.stock-autocomplete-box {
+    margin-top: 4px;
+    padding: 4px 0;
+    border-radius: 8px;
+    background-color: rgba(30, 32, 34, 0.95);
+    border: 1px solid rgba(138, 180, 248, 0.15);
+    max-height: 280px;
+}
+
+.stock-ac-btn {
+    padding: 0;
+    margin: 0;
+    border-radius: 6px;
+    background-color: transparent;
+    border: none;
+}
+
+.stock-ac-row {
+    padding: 6px 8px;
+    margin: 1px 4px;
+    border-radius: 6px;
+    transition-duration: 150ms;
+}
+
+.stock-ac-row-hover {
+    background-color: rgba(138, 180, 248, 0.12);
+}
+
+.stock-ac-symbol {
+    font-weight: bold;
+    font-family: monospace;
+    min-width: 110px;
+    color: #8AB4F8;
+    font-size: 0.95em;
+}
+
+.stock-ac-name {
+    color: #94a3b8;
+    font-size: 0.85em;
+    margin-left: 8px;
+}
+
+.stock-ac-provider {
+    font-size: 0.7em;
+    color: #64748b;
+    margin-left: 6px;
+    padding: 1px 6px;
+    border-radius: 4px;
+    background-color: rgba(100, 116, 139, 0.2);
+    font-weight: 600;
+}

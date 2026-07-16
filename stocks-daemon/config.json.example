@@ -1,0 +1,11 @@
+{
+  "symbols": ["AAPL", "NVDA", "RELIANCE-EQ", "NIFTY", "SENSEX"],
+  "refresh_interval": 60,
+  "finnhub_api_key": "YOUR_FINNHUB_KEY",
+  "angelone_api_key": "YOUR_SMARTAPI_KEY",
+  "angelone_client_id": "YOUR_CLIENT_ID",
+  "angelone_pin": "YOUR_4DIGIT_PIN",
+  "angelone_totp_secret": "YOUR_TOTP_SECRET",
+  "groq_api_key": "YOUR_GROQ_API_KEY",
+  "debug": false
+}

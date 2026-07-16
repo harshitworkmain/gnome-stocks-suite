@@ -1,0 +1,14 @@
+[Unit]
+Description=GNOME Stocks Polling Daemon
+Documentation=https://github.com/yourname/gnome-stocks
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 %h/.local/share/gnome-stocks-daemon/daemon.py
+Restart=on-failure
+RestartSec=10
+
+[Install]
+WantedBy=default.target

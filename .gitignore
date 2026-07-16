@@ -1,0 +1,20 @@
+# GNOME Stocks gitignore
+
+# Secrets and User Configs
+stocks-daemon/config.json
+
+# Databases and Local Caches
+stocks-daemon/llm_cache.db
+stocks-daemon/__pycache__/
+**/__pycache__/
+*.pyc
+
+# Extension compiled schemas
+gnome-stocks@yourname/schemas/gschemas.compiled
+
+# Logs and debug files
+logs/
+*.log
+
+# System files
+.DS_Store

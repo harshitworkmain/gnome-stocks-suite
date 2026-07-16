@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=GNOME Stocks Widget
+Comment=Stock market desktop widget
+Exec=python3 /home/harshit/Documents/NN/stock-extension-widget/gnome-stocks-widget/widget.py
+Icon=accessories-calculator
+Terminal=false
+Categories=Utility;Finance;
+StartupWMClass=gnome-stocks
+X-GNOME-Autostart-enabled=false

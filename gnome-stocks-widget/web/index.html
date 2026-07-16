@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GNOME Stocks</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Lightweight Charts by TradingView -->
+  <script src="https://unpkg.com/lightweight-charts@4.1.3/dist/lightweight-charts.standalone.production.js"></script>
+</head>
+<body>
+  <!-- ─── App Shell ─── -->
+  <div id="app">
+
+    <!-- ─── Left Sidebar ─── -->
+    <aside id="sidebar">
+      <div class="sidebar-header">
+        <h2>📈 Stocks</h2>
+      </div>
+
+      <!-- Watchlist -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">
+          <span>Watchlist</span>
+          <button id="add-watchlist-btn" class="icon-btn" title="Add to watchlist">+</button>
+        </div>
+        <div id="watchlist" class="sidebar-list">
+          <div class="sidebar-empty">Loading…</div>
+        </div>
+      </div>
+
+      <!-- Market Indices -->
+      <div class="sidebar-section">
+        <div class="sidebar-section-title"><span>Indices</span></div>
+        <div id="indices-list" class="sidebar-list">
+          <div class="sidebar-empty">Loading…</div>
+        </div>
+      </div>
+
+      <!-- GNOME AI Button -->
+      <button class="sidebar-ai-btn" id="market-ai-btn">
+        <span>GNOME AI</span>
+      </button>
+    </aside>
+
+    <!-- ─── Main Content ─── -->
+    <main id="main">
+
+      <!-- Top Search Bar -->
+      <div id="search-bar-container">
+        <div id="search-bar">
+          <span class="search-icon">🔍</span>
+          <input
+            type="text"
+            id="search-input"
+            placeholder="Search for stocks, ETFs, crypto, and more"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <div id="search-results" class="search-dropdown hidden"></div>
+        </div>
+        <!-- Filter pills -->
+        <div id="filter-pills">
+          <button class="pill active" data-filter="all">All</button>
+          <button class="pill" data-filter="EQUITY">Stocks</button>
+          <button class="pill" data-filter="CRYPTOCURRENCY">Crypto</button>
+          <button class="pill" data-filter="CURRENCY">Currencies</button>
+          <button class="pill" data-filter="FUTURE">Futures</button>
+          <button class="pill" data-filter="ETF">ETFs</button>
+        </div>
+      </div>
+
+      <!-- Dynamic Content Area -->
+      <div id="content-area">
+        <!-- Home View (default) -->
+        <div id="home-view">
+          <div id="market-cards" class="market-cards-grid">
+            <!-- Populated by JS: sparkline index cards -->
+          </div>
+          <div id="market-news">
+            <div class="section-header">
+              <h2 class="section-title">Market News</h2>
+              <a class="view-all-link" href="https://finance.yahoo.com/news/" target="_blank" rel="noopener">View All</a>
+            </div>
+            <div id="news-list" class="news-list">
+              <!-- Populated by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Symbol Detail View (hidden by default) -->
+        <div id="detail-view" class="hidden">
+          <!-- Header -->
+          <div id="detail-header">
+            <button id="back-btn" class="back-btn">← Back</button>
+            <div id="detail-title-row">
+              <div>
+                <h1 id="detail-name">Company Name</h1>
+                <span id="detail-symbol" class="detail-symbol">AAPL</span>
+                <span id="detail-exchange" class="detail-exchange">NASDAQ</span>
+                <button id="watchlist-star-btn" class="watchlist-star-btn" title="Add to watchlist">☆</button>
+              </div>
+              <div id="detail-price-block">
+                <span id="detail-price" class="detail-price">$0.00</span>
+                <span id="detail-change" class="detail-change positive">+0.00 (+0.00%)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Chart -->
+          <div id="chart-container">
+            <div id="chart-controls">
+              <button class="timeframe-btn active" data-range="1d">1D</button>
+              <button class="timeframe-btn" data-range="5d">5D</button>
+              <button class="timeframe-btn" data-range="1mo">1M</button>
+              <button class="timeframe-btn" data-range="6mo">6M</button>
+              <button class="timeframe-btn" data-range="ytd">YTD</button>
+              <button class="timeframe-btn" data-range="1y">1Y</button>
+              <button class="timeframe-btn" data-range="5y">5Y</button>
+              <button class="timeframe-btn" data-range="max">MAX</button>
+            </div>
+            <div id="chart" class="chart-area"></div>
+          </div>
+
+          <!-- Key Stats -->
+          <div id="stats-section">
+            <h2 class="section-title">Key Statistics</h2>
+            <div id="stats-grid" class="stats-grid">
+              <!-- 2-column grid, populated by JS -->
+            </div>
+          </div>
+
+          <!-- About -->
+          <div id="about-section">
+            <h2 class="section-title">About</h2>
+            <p id="about-text" class="about-text"></p>
+            <button id="about-toggle" class="about-toggle hidden">Show more</button>
+          </div>
+
+          <!-- Symbol News -->
+          <div id="detail-news">
+            <h2 class="section-title">News</h2>
+            <div id="detail-news-list" class="news-list"></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- ─── GNOME AI Chat Panel (slides in from right) ─── -->
+    <div id="ai-panel" class="ai-panel hidden">
+      <div class="ai-panel-header">
+        <div class="ai-panel-title">
+          <h3>GNOME AI</h3>
+          <span class="ai-badge">Educational</span>
+        </div>
+        <button id="ai-close-btn" class="ai-close-btn">✕</button>
+      </div>
+      <div id="ai-messages" class="ai-messages">
+        <div class="ai-msg ai-msg-assistant">
+          <div class="ai-msg-content">
+            👋 Hi! I'm your educational market assistant. Ask me about financial concepts, stock metrics, or what any market term means. <strong>I don't give financial advice</strong> — I help you learn!
+          </div>
+        </div>
+      </div>
+      <div class="ai-input-area">
+        <input
+          type="text"
+          id="ai-input"
+          placeholder="Ask about any financial concept..."
+          autocomplete="off"
+          spellcheck="false"
+        />
+        <button id="ai-send-btn" class="ai-send-btn">→</button>
+      </div>
+    </div>
+
+    <!-- ─── Explain Popover (floats above stats) ─── -->
+    <div id="explain-popover" class="explain-popover hidden">
+      <div class="explain-popover-content">
+        <div class="explain-popover-term" id="explain-term"></div>
+        <div class="explain-popover-text" id="explain-text">Loading…</div>
+      </div>
+      <div class="explain-popover-arrow"></div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
