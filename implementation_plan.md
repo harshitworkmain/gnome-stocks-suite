@@ -202,29 +202,26 @@ To transition GNOME Stocks from a local tool to a universally available extensio
 * **Step 2:** Integrate Supabase REST capabilities to store the `watchlist` and `settings` objects.
 * **Step 3:** Setup SonarQube workflows to prep the codebase for the GNOME Extensions platform.
 
----
+## 8. Free Deployment Options & CI/CD Strategies (API Server)
 
-## 8. Free Deployment Options & Strategies (API Server)
+Since you need a **100% free hosting platform** with **automated CI/CD pipelines** triggered by git events, the options have been re-evaluated (Koyeb has been removed as it no longer offers a free tier).
 
-To deploy the backend proxy server (`api_server.py`) without incurring costs, we can utilize one of the following free hosting platforms:
+### 8.1 Render (Recommended for Simple Python Setup)
+*   **How CI/CD Works:** Connects directly to your GitHub repository. Any push to the `main` branch automatically triggers a build and deploy pipeline.
+*   **Pros:** Native Python environment, auto-deploys on git push, handles environment secrets securely, completely free.
+*   **Cons:** Spindown on 15 minutes of inactivity (causing a 50s cold-start on the first query from GNOME shell).
+*   **Setup:** Point Render to the repository, set the build command to `pip install -r requirements.txt`, and start command to `python stocks-daemon/api_server.py`.
 
-### 8.1 Koyeb (Recommended)
-*   **Pros:** Native Python or Dockerized hosting, 512MB RAM container, free SSL. Unlike Render, Koyeb's free tier does not automatically spin down or sleep on inactivity, ensuring zero cold-starts when GNOME Shell or the widget queries it.
-*   **Cons:** Limited to 1 service per account.
-*   **Migration Effort:** Low. Simply add a standard `Dockerfile` or rely on Koyeb's buildpack detection, and expose port `5005` (mapped to Koyeb's default HTTP port).
+### 8.2 Vercel Serverless Functions (Recommended for 24/7 Zero Cold-Start)
+*   **How CI/CD Works:** Full integration with GitHub. Auto-deploys on git push, offers preview deployments for pull requests, and production deployment on merge to `main`.
+*   **Pros:** Edge-routing, zero cold-starts, high reliability, completely free.
+*   **Cons:** Flask code must be served as serverless functions.
+*   **Setup:** Wrap the server in a serverless entrypoint (e.g. `index.py`) using `wsgi` routing, add a `vercel.json` configuration, and move dependencies to root.
 
-### 8.2 Hugging Face Spaces (Docker)
-*   **Pros:** 100% free, runs 24/7 on a robust platform (16GB RAM, 2 vCPUs), no cold-starts, built-in secret management.
-*   **Cons:** Public URL exposure by default (unless configured carefully with API keys), default running port must map to `7860`.
-*   **Migration Effort:** Low. Add a `Dockerfile` exposing port `7860` and run the server using `api_server.py`.
+### 8.3 Hugging Face Spaces (Dockerized 24/7 Free Hosting)
+*   **How CI/CD Works:** Can be integrated with GitHub Actions. On git push, a GitHub Action workflow automatically pushes the Docker setup to Hugging Face Git, triggering a build and deploy.
+*   **Pros:** 24/7 continuous runtime (no sleeping/cold-starts), generous resources (16GB RAM).
+*   **Cons:** Setting up CI/CD requires writing a custom GitHub Actions `.yml` workflow file to mirror updates.
+*   **Setup:** Create a space, write a custom `Dockerfile` exposing port `7860`, and set up SSH keys in GitHub Secrets for automatic pushes.
 
-### 8.3 Render (Free Tier)
-*   **Pros:** Built-in Python support, zero configuration, auto-build on git push.
-*   **Cons:** Automatically sleeps after 15 minutes of silence. The first API query from the extension will take up to 50 seconds to respond as the instance spins back up.
-*   **Migration Effort:** Low. Configure it as a Web Service running `python stocks-daemon/api_server.py`.
-
-### 8.4 Vercel Serverless Functions
-*   **Pros:** Ultra-fast, edge-routed, zero cold-starts, auto-scales instantly.
-*   **Cons:** Requires rewriting or wrapping the Flask app in serverless functions (using WSGI adapters like `wsgi-serverless` or Vercel's standard configuration).
-*   **Migration Effort:** Medium. Requires adding a `vercel.json` config and modifying the folder structure to serve via `/api`.
 
