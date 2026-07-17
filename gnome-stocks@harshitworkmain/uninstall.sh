@@ -1,6 +1,6 @@
 #!/bin/bash
 
-EXT_UUID="gnome-stocks@yourname"
+EXT_UUID="gnome-stocks@harshitworkmain"
 EXT_DIR="$HOME/.local/share/gnome-shell/extensions/$EXT_UUID"
 
 echo "Disabling extension..."

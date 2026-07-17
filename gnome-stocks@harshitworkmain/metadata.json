@@ -1,0 +1,15 @@
+{
+  "uuid": "gnome-stocks@harshitworkmain",
+  "name": "GNOME Stocks",
+  "version": 2,
+  "description": "Real-time stock ticker for the GNOME panel with AI-powered market intelligence. Supports global and Indian markets via yFinance, Finnhub, and Angel One SmartAPI. Includes GNOME AI educational chat.",
+  "shell-version": [
+    "42",
+    "43",
+    "44",
+    "45",
+    "46"
+  ],
+  "url": "https://github.com/harshitworkmain/gnome-stocks-suite",
+  "settings-schema": "org.gnome.shell.extensions.stocks"
+}

@@ -7,5 +7,6 @@
   "angelone_pin": "YOUR_4DIGIT_PIN",
   "angelone_totp_secret": "YOUR_TOTP_SECRET",
   "groq_api_key": "YOUR_GROQ_API_KEY",
+  "api_url": "http://127.0.0.1:5005",
   "debug": false
 }

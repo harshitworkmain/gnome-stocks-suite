@@ -224,4 +224,58 @@ Since you need a **100% free hosting platform** with **automated CI/CD pipelines
 *   **Cons:** Setting up CI/CD requires writing a custom GitHub Actions `.yml` workflow file to mirror updates.
 *   **Setup:** Create a space, write a custom `Dockerfile` exposing port `7860`, and set up SSH keys in GitHub Secrets for automatic pushes.
 
+### 8.4 Modular Cross-Platform Deployment (Multi-Service Stack)
 
+To achieve **zero cold-starts** for the user interface while keeping the backend logic modular and free, we align the stack directly with the native GNOME desktop distribution model. 
+
+```
+┌────────────────────────────────────────────────────────┐
+│               Linux Desktop Client (Local)             │
+│  ┌───────────────────────┐   ┌──────────────────────┐  │
+│  │ GNOME Shell Extension │   │ GTK3 Desktop Widget  │  │
+│  │ (Installed locally)   │   │ (Flatpak / Local FS) │  │
+│  └───────────┬───────────┘   └──────────┬───────────┘  │
+└──────────────┼──────────────────────────┼──────────────┘
+               │                          │
+               └────────────┬─────────────┘
+                            │ (HTTP REST)
+                            ▼
+              ┌───────────────────────────┐
+              │ Stateless API Backend     │
+              │ (Render Free / Vercel API)│
+              └─────────────┬─────────────┘
+                            │ (JSON API)
+                            ▼
+              ┌───────────────────────────┐
+              │ Cloud Database (Supabase) │ (Optional for sync)
+              └───────────────────────────┘
+```
+
+1.  **Frontend Layer (Local App Shell - 0ms Cold-Start):**
+    *   **Architecture:** The HTML, JS, and CSS files are **not** hosted on a web server. They are distributed inside the extension zip or desktop Flatpak package and run locally from the user's hard drive.
+    *   **Benefit:** This acts as a "perfect" local CDN. The UI renders instantly with **zero cold-start latency** because no network requests are required to load the interface.
+2.  **Stateless API Layer (The Python Proxy):**
+    *   **Host:** **Render Web Services** (Free Tier) or **Vercel**.
+    *   **Behavior:** Moves all API keys, local indices (Angel One Scrip Master), and Groq LLM integration off the user's local machine. The local clients simply send request parameters (like `GET /api/quote?symbol=AAPL`) to this cloud URL.
+3.  **Database/Storage Layer (Watchlist Sync Options):**
+    *   **Stateless Mode (Default / Simple):** Watchlists are saved in local storage (GSettings for the extension, `localStorage` for the widget). The watchlist array is sent directly in API calls. The API server does not need a database, making it 100% stateless and robust against database down-time.
+    *   **Cloud Sync Mode (Optional / Supabase):** A free Supabase database is introduced solely to sync watchlists in real-time between the extension and the widget (or across multiple computers) via a shared device ID or user login.
+
+### 8.5 Alignment of 3-Layer Stack with Distribution Channels
+
+This modular deployment integrates seamlessly with the target Linux app stores and package managers:
+
+#### A. GNOME Shell Extension (extensions.gnome.org)
+*   **Packaging:** Standard zip containing `extension.js`, `popup.js`, `prefs.js`, `metadata.json`, and static stylesheet.
+*   **Configuration:** The remote cloud API URL is set as a compile-time constant or user-editable preference inside `prefs.js`.
+*   **Deployment:** Uploaded to the GNOME Extension store. Approved extensions are delivered to users with automatic background updates.
+
+#### B. GTK3 Desktop Widget (Flathub & Flatpak)
+*   **Packaging:** A Flatpak sandbox manifest referencing our GitHub repo. The manifest installs Python, PyGObject, and WebKit2GTK dependencies.
+*   **Configuration:** The widget's internal web view loads the local HTML page (`index.html`) using a local `file://` URI inside the sandbox. The JavaScript calls are directed to the remote cloud API.
+*   **Deployment:** Submitted to **Flathub** for free compilation and hosting. Users can search and click-to-install "GNOME Stocks" directly from the native GNOME Software Center.
+
+#### C. GitHub Releases (Unified Repository CI/CD)
+*   Whenever you push a change to the `main` branch:
+    1.  The cloud API server (Render/Vercel) automatically rebuilds and deploys the backend changes via GitHub CI/CD integration.
+    2.  For local updates, GitHub Actions can automatically package a new release `.zip` for the extension and a `.deb` for the widget, making them downloadable instantly from the GitHub Releases tab.

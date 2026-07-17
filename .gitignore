@@ -10,7 +10,12 @@ stocks-daemon/__pycache__/
 *.pyc
 
 # Extension compiled schemas
-gnome-stocks@yourname/schemas/gschemas.compiled
+gnome-stocks@harshitworkmain/schemas/gschemas.compiled
+
+# Build artifacts
+*.zip
+*.tar.gz
+*.deb
 
 # Logs and debug files
 logs/

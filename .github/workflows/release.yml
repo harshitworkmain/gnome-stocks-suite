@@ -1,0 +1,50 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # ── Package GNOME Extension .zip ──
+      - name: Compile GSettings schemas
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq libglib2.0-bin
+          glib-compile-schemas gnome-stocks@harshitworkmain/schemas/
+
+      - name: Package extension zip
+        run: |
+          cd gnome-stocks@harshitworkmain
+          zip -r ../gnome-stocks-extension-${{ github.ref_name }}.zip \
+            metadata.json extension.js popup.js prefs.js stylesheet.css schemas/
+
+      # ── Package Widget source archive ──
+      - name: Package widget archive
+        run: |
+          tar czf gnome-stocks-widget-${{ github.ref_name }}.tar.gz \
+            gnome-stocks-widget/ \
+            stocks-daemon/api_server.py \
+            stocks-daemon/angelone_indexer.py \
+            stocks-daemon/config.json.example \
+            stocks-daemon/gnome-stocks-api.service \
+            stocks-daemon/install-daemon.sh \
+            requirements.txt \
+            README.md
+
+      # ── Create GitHub Release ──
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            gnome-stocks-extension-${{ github.ref_name }}.zip
+            gnome-stocks-widget-${{ github.ref_name }}.tar.gz

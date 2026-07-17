@@ -21,12 +21,15 @@ from datetime import datetime
 from pathlib import Path
 
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 
 import yfinance as yf
 
 app = Flask(__name__)
+CORS(app)  # Allow cross-origin requests from local desktop clients
 
 # ─── Config ──────────────────────────────────────────────────────────────────
+# Env vars take priority (cloud deploy), fall back to config.json (local dev)
 
 CONFIG_PATH = Path(__file__).parent / "config.json"
 
@@ -39,7 +42,7 @@ def _load_config():
         return {}
 
 _config = _load_config()
-GROQ_API_KEY = _config.get("groq_api_key", "")
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY") or _config.get("groq_api_key", "")
 
 # ─── In-memory cache with TTL ───────────────────────────────────────────────
 
@@ -758,6 +761,7 @@ def api_health():
 # ─── Main ────────────────────────────────────────────────────────────────────
 
 if __name__ == "__main__":
-    print("[gnome-stocks-api] Starting on http://localhost:5005 (Phase 3)", flush=True)
+    port = int(os.environ.get("PORT", 5005))
+    print(f"[gnome-stocks-api] Starting on http://0.0.0.0:{port} (Phase 4)", flush=True)
     print(f"[gnome-stocks-api] Groq API: {'configured' if GROQ_API_KEY else 'NOT configured'}", flush=True)
-    app.run(host="127.0.0.1", port=5005, debug=False, threaded=True)
+    app.run(host="0.0.0.0", port=port, debug=False, threaded=True)

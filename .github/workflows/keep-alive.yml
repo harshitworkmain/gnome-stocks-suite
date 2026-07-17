@@ -1,0 +1,20 @@
+name: Keep Render Alive
+
+on:
+  schedule:
+    # Ping every 14 minutes during market hours (UTC: 4am-9pm IST: 9:30am-2:30am)
+    - cron: "*/14 * * * *"
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping health endpoint
+        run: |
+          RENDER_URL="${{ secrets.RENDER_API_URL }}"
+          if [ -z "$RENDER_URL" ]; then
+            echo "RENDER_API_URL secret not set, skipping"
+            exit 0
+          fi
+          curl -sf "${RENDER_URL}/api/health" || echo "Server may be starting up"

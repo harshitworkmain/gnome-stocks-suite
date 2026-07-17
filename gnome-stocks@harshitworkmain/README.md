@@ -36,7 +36,7 @@ Then edit `~/.config/gnome-stocks/config.json` and set your credentials.
 
 ### 2. Install the Extension
 ```bash
-cd gnome-stocks@yourname
+cd gnome-stocks@harshitworkmain
 chmod +x install.sh
 ./install.sh
 ```
@@ -45,7 +45,7 @@ chmod +x install.sh
 ### 3. Configure Settings
 Open Extension Manager → Minimalist Stocks → Settings, or:
 ```bash
-gnome-extensions prefs gnome-stocks@yourname
+gnome-extensions prefs gnome-stocks@harshitworkmain
 ```
 
 ## Configuration
@@ -94,7 +94,7 @@ journalctl -f /usr/bin/gnome-shell | grep gnome-stocks
 
 ## Uninstall
 ```bash
-cd gnome-stocks@yourname && chmod +x uninstall.sh && ./uninstall.sh
+cd gnome-stocks@harshitworkmain && chmod +x uninstall.sh && ./uninstall.sh
 systemctl --user stop gnome-stocks-daemon
 systemctl --user disable gnome-stocks-daemon
 ```

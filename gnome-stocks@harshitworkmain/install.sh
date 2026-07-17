@@ -1,7 +1,7 @@
 #!/bin/bash
 set -e
 
-EXT_UUID="gnome-stocks@yourname"
+EXT_UUID="gnome-stocks@harshitworkmain"
 EXT_DIR="$HOME/.local/share/gnome-shell/extensions/$EXT_UUID"
 
 echo "Installing $EXT_UUID..."

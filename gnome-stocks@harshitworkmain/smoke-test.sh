@@ -19,7 +19,7 @@ fi
 echo "[2/4] Checking metadata.json..."
 if [ -f "metadata.json" ]; then
     uuid=$(grep -o '"uuid":[[:space:]]*"[^"]*"' metadata.json | cut -d'"' -f4)
-    if [ "$uuid" = "gnome-stocks@yourname" ]; then
+    if [ "$uuid" = "gnome-stocks@harshitworkmain" ]; then
         echo "  ✅ UUID check passed."
         PASS=$((PASS+1))
     else

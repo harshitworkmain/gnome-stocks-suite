@@ -2,7 +2,21 @@ const { St, Clutter, Gio, GLib, Soup } = imports.gi;
 const PopupMenu = imports.ui.popupMenu;
 
 const CONFIG_FILE = GLib.get_home_dir() + '/.config/gnome-stocks/config.json';
-const API_URL = 'http://127.0.0.1:5005';
+
+// Read API URL from config, default to localhost for local dev
+let API_URL = 'http://127.0.0.1:5005';
+try {
+    let configFile = Gio.File.new_for_path(CONFIG_FILE);
+    if (configFile.query_exists(null)) {
+        let [ok, contents] = configFile.load_contents(null);
+        if (ok) {
+            let cfg = JSON.parse(imports.byteArray.toString(contents));
+            if (cfg.api_url) API_URL = cfg.api_url;
+        }
+    }
+} catch (e) {
+    log('[gnome-stocks] Could not read api_url from config: ' + e.message);
+}
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
 

@@ -4,7 +4,7 @@
    Features: Universal Symbol Router, Market AI Chat, Beginner Mode Explanations
    ═══════════════════════════════════════════════════════════════════════════ */
 
-const API = 'http://127.0.0.1:5005';
+const API = localStorage.getItem('apiUrl') || 'http://127.0.0.1:5005';
 
 // ─── State ─────────────────────────────────────────────────────────────────
 const state = {
