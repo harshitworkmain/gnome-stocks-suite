@@ -743,7 +743,118 @@ def api_llm_chat():
     })
 
 
-# ─── Health ──────────────────────────────────────────────────────────────────
+# ─── Root Dashboard & Health ─────────────────────────────────────────────────
+
+@app.route("/")
+def api_root():
+    """Landing dashboard — Phase 4.1."""
+    groq_status = "Connected" if GROQ_API_KEY else "Not Configured"
+    groq_icon = "⚡" if GROQ_API_KEY else "⚠️"
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GNOME Stocks API</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*{{margin:0;padding:0;box-sizing:border-box}}
+body{{font-family:'Inter',system-ui,-apple-system,sans-serif;background:#0f1115;color:#e1e3e8;min-height:100vh;padding:2rem 1rem}}
+.container{{max-width:720px;margin:0 auto}}
+.header{{text-align:center;margin-bottom:2.5rem}}
+.header h1{{font-size:2rem;font-weight:700;color:#e1e3e8;margin-bottom:.5rem}}
+.header h1 span{{color:#6366f1}}
+.badges{{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-top:1rem}}
+.badge{{font-size:.75rem;font-weight:600;padding:5px 12px;border-radius:20px;text-transform:uppercase;letter-spacing:.5px}}
+.badge-live{{background:rgba(16,185,129,.15);color:#10b981;border:1px solid rgba(16,185,129,.3)}}
+.badge-ai{{background:rgba(99,102,241,.15);color:#818cf8;border:1px solid rgba(99,102,241,.3)}}
+.badge-live::before{{content:'';display:inline-block;width:7px;height:7px;border-radius:50%;background:#10b981;margin-right:6px;animation:pulse 2s infinite}}
+@keyframes pulse{{0%,100%{{opacity:1}}50%{{opacity:.4}}}}
+.subtitle{{color:#9ca3af;font-size:.9rem;margin-top:.75rem}}
+
+.search-box{{background:#1a1d24;border:1px solid #2e3440;border-radius:12px;padding:1.25rem;margin-bottom:1.5rem;transition:border-color .2s}}
+.search-box:focus-within{{border-color:#6366f1}}
+.search-box label{{font-size:.8rem;color:#9ca3af;text-transform:uppercase;letter-spacing:.5px;font-weight:600;display:block;margin-bottom:.5rem}}
+.search-row{{display:flex;gap:.5rem}}
+.search-row input{{flex:1;background:#0f1115;border:1px solid #2e3440;border-radius:8px;padding:10px 14px;color:#e1e3e8;font-family:inherit;font-size:.9rem;outline:none;transition:border-color .2s}}
+.search-row input:focus{{border-color:#6366f1}}
+.search-row input::placeholder{{color:#6b7280}}
+.search-row button{{background:#6366f1;color:#fff;border:none;border-radius:8px;padding:10px 20px;font-family:inherit;font-weight:600;font-size:.85rem;cursor:pointer;transition:background .2s;white-space:nowrap}}
+.search-row button:hover{{background:#4f46e5}}
+#search-result{{margin-top:.75rem;font-size:.8rem;color:#9ca3af;max-height:200px;overflow-y:auto;display:none}}
+#search-result pre{{background:#0f1115;border:1px solid #2e3440;border-radius:8px;padding:.75rem;color:#a5b4fc;font-size:.75rem;white-space:pre-wrap;word-break:break-all}}
+
+.section-title{{font-size:.8rem;color:#6b7280;text-transform:uppercase;letter-spacing:1px;font-weight:600;margin-bottom:.75rem}}
+.endpoints{{display:grid;gap:.5rem;margin-bottom:2rem}}
+.ep{{background:#1a1d24;border:1px solid #2e3440;border-radius:10px;padding:.85rem 1.1rem;display:flex;align-items:center;gap:.75rem;text-decoration:none;color:#e1e3e8;transition:all .2s;cursor:pointer}}
+.ep:hover{{border-color:#6366f1;background:#1e2128;transform:translateX(4px)}}
+.ep-method{{background:rgba(16,185,129,.15);color:#10b981;font-size:.65rem;font-weight:700;padding:3px 8px;border-radius:4px;letter-spacing:.5px;flex-shrink:0}}
+.ep-method.post{{background:rgba(251,191,36,.15);color:#fbbf24}}
+.ep-path{{font-family:'SF Mono',Consolas,monospace;font-size:.85rem;color:#a5b4fc;flex:1}}
+.ep-desc{{font-size:.75rem;color:#6b7280;text-align:right;flex-shrink:0}}
+
+.links{{display:flex;gap:.75rem;justify-content:center;flex-wrap:wrap;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid #1e2128}}
+.links a{{color:#6b7280;font-size:.8rem;text-decoration:none;transition:color .2s}}
+.links a:hover{{color:#a5b4fc}}
+.links a span{{margin-right:4px}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📈 <span>GNOME Stocks</span> API</h1>
+    <div class="badges">
+      <span class="badge badge-live">Online — v3.0</span>
+      <span class="badge badge-ai">{groq_icon} Groq LPU {groq_status}</span>
+    </div>
+    <p class="subtitle">Stateless API powering the GNOME Stocks Extension &amp; Desktop Widget</p>
+  </div>
+
+  <div class="search-box">
+    <label>🔍 Try it — Global Symbol Search</label>
+    <div class="search-row">
+      <input type="text" id="search-input" placeholder="Search any stock, crypto, index… (e.g. AAPL, RELIANCE, BTC)" autocomplete="off">
+      <button onclick="doSearch()">Search</button>
+    </div>
+    <div id="search-result"><pre id="search-json"></pre></div>
+  </div>
+
+  <p class="section-title">API Endpoints</p>
+  <div class="endpoints">
+    <a class="ep" href="/api/health"><span class="ep-method">GET</span><span class="ep-path">/api/health</span><span class="ep-desc">Service status</span></a>
+    <a class="ep" href="/api/search?q=AAPL"><span class="ep-method">GET</span><span class="ep-path">/api/search?q=AAPL</span><span class="ep-desc">Symbol search</span></a>
+    <a class="ep" href="/api/quote?symbol=AAPL"><span class="ep-method">GET</span><span class="ep-path">/api/quote?symbol=AAPL</span><span class="ep-desc">Real-time quote</span></a>
+    <a class="ep" href="/api/profile?symbol=AAPL"><span class="ep-method">GET</span><span class="ep-path">/api/profile?symbol=AAPL</span><span class="ep-desc">Company profile</span></a>
+    <a class="ep" href="/api/history?symbol=AAPL&amp;range=1mo"><span class="ep-method">GET</span><span class="ep-path">/api/history?symbol=AAPL</span><span class="ep-desc">Chart data</span></a>
+    <a class="ep" href="/api/news?symbol=AAPL"><span class="ep-method">GET</span><span class="ep-path">/api/news?symbol=AAPL</span><span class="ep-desc">Market news</span></a>
+    <a class="ep" href="/api/llm/explain?term=Market+Cap"><span class="ep-method">GET</span><span class="ep-path">/api/llm/explain</span><span class="ep-desc">AI explanation</span></a>
+    <div class="ep" style="cursor:default"><span class="ep-method post">POST</span><span class="ep-path">/api/llm/chat</span><span class="ep-desc">AI chatbot</span></div>
+  </div>
+
+  <div class="links">
+    <a href="https://github.com/harshitworkmain/gnome-stocks-suite" target="_blank"><span>⭐</span>GitHub Repository</a>
+    <a href="https://github.com/harshitworkmain/gnome-stocks-suite/releases/tag/v1.0.0" target="_blank"><span>📦</span>v1.0.0 Release</a>
+    <a href="/api/health"><span>💚</span>Health Check</a>
+  </div>
+</div>
+<script>
+function doSearch(){{
+  var q=document.getElementById('search-input').value.trim();
+  if(!q)return;
+  var box=document.getElementById('search-result');
+  var pre=document.getElementById('search-json');
+  box.style.display='block';
+  pre.textContent='Searching…';
+  fetch('/api/search?q='+encodeURIComponent(q))
+    .then(function(r){{return r.json()}})
+    .then(function(d){{pre.textContent=JSON.stringify(d,null,2)}})
+    .catch(function(e){{pre.textContent='Error: '+e.message}});
+}}
+document.getElementById('search-input').addEventListener('keydown',function(e){{if(e.key==='Enter')doSearch()}});
+</script>
+</body>
+</html>"""
+
 
 @app.route("/api/health")
 def api_health():
