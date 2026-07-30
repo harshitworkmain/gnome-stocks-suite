@@ -2,6 +2,17 @@
 
 A complete stock monitoring system for GNOME Desktop — featuring a top-bar extension, a desktop widget with interactive charts, and an AI-powered market intelligence engine.
 
+---
+
+## 🚀 Live Services & Releases
+
+- **Live Cloud API Endpoint:** `https://gnome-stocks-api.onrender.com`
+- **Latest Release:** [v1.0.0 on GitHub Releases](https://github.com/harshitworkmain/gnome-stocks-suite/releases/tag/v1.0.0)
+  - `gnome-stocks-extension-v1.0.0.zip` (Ready for GNOME Extensions upload)
+  - `gnome-stocks-widget-v1.0.0.tar.gz` (Standalone Desktop Widget & Daemon bundle)
+
+---
+
 ## Components
 
 | Component | Description |
@@ -9,6 +20,8 @@ A complete stock monitoring system for GNOME Desktop — featuring a top-bar ext
 | **stocks-daemon/** | Python Flask API server + polling daemon (Angel One + Finnhub + Groq AI) |
 | **gnome-stocks@harshitworkmain/** | GNOME Shell top-bar extension with autocomplete popup |
 | **gnome-stocks-widget/** | GTK3 desktop widget with charts, stats, news & AI chat |
+
+---
 
 ## Quick Start (Local)
 
@@ -51,18 +64,20 @@ Then restart GNOME Shell (`Alt+F2` → `r` → Enter) and enable "GNOME Stocks" 
 
 ## Cloud Deployment (Render)
 
-The API server can be deployed to [Render](https://render.com) for remote access:
+The API server is live on [Render](https://render.com) at `https://gnome-stocks-api.onrender.com`.
+
+### Setting up your own Render instance:
 
 1. **Connect repo** → Link this GitHub repo on Render dashboard
 2. **Blueprint deploy** → Render auto-detects `render.yaml` and sets up the service
 3. **Set secrets** → Add `GROQ_API_KEY` in the Render environment variables panel
 4. **Update clients** → Set your Render URL in the widget/extension config:
-   - **Widget:** `localStorage.setItem('apiUrl', 'https://your-app.onrender.com')`
-   - **Extension:** Add `"api_url": "https://your-app.onrender.com"` to `~/.config/gnome-stocks/config.json`
+   - **Widget:** `localStorage.setItem('apiUrl', 'https://gnome-stocks-api.onrender.com')`
+   - **Extension:** Add `"api_url": "https://gnome-stocks-api.onrender.com"` to `~/.config/gnome-stocks/config.json`
 
 ### Keep-Alive (No Cold Starts)
 
-A GitHub Actions cron (`.github/workflows/keep-alive.yml`) pings the health endpoint every 14 minutes to prevent Render from sleeping. Add your deployed URL as a GitHub secret named `RENDER_API_URL`.
+A GitHub Actions cron (`.github/workflows/keep-alive.yml`) pings `https://gnome-stocks-api.onrender.com/api/health` every 14 minutes to prevent Render from sleeping. The secret `RENDER_API_URL` is configured in the repository.
 
 ---
 
@@ -81,7 +96,7 @@ A Flatpak manifest (`io.github.harshitworkmain.GnomeStocks.yml`) is included for
 
 ### GitHub Releases
 
-Push a version tag to auto-create a release with packaged artifacts:
+Pushing a version tag automatically triggers GitHub Actions (`.github/workflows/release.yml`) to package and publish release assets:
 
 ```bash
 git tag v1.0.0 && git push origin v1.0.0
@@ -98,7 +113,7 @@ Edit `stocks-daemon/config.json`:
 | `groq_api_key` | Groq API key for AI features |
 | `finnhub_api_key` | Finnhub key for global market data |
 | `angelone_*` | Angel One SmartAPI credentials for Indian markets |
-| `api_url` | Remote API URL (default: `http://127.0.0.1:5005`) |
+| `api_url` | Remote API URL (default: `http://127.0.0.1:5005` or live Render URL) |
 
 See `config.json.example` for the full template.
 

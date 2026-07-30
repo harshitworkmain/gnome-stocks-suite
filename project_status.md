@@ -1,6 +1,6 @@
 # Project Status
 
-**Current Phase:** Phase 3 Complete ✅
+**Current Phase:** Phase 4 Complete ✅
 
 ## Phase 1a: Finnhub + Yahoo Daemon + Extension Refactor ✅
 ## Phase 1b: Angel One SmartAPI Integration ✅
@@ -58,3 +58,26 @@
 - [x] Profile cache extended to 24 hours
 - [x] `requestAnimationFrame` for chat DOM mutations (smooth animations)
 - [x] 300ms debounce on all search inputs (widget + extension)
+
+---
+
+## Phase 4: Cloud Infrastructure & Distribution ✅
+
+### 4a: Backend Containerization & Cloud Deployment ✅
+- [x] Dependencies pinned in `requirements.txt` (`flask`, `yfinance`, `groq`, `gunicorn`, `flask-cors`)
+- [x] `stocks-daemon/api_server.py` refactored for cloud: env vars (`GROQ_API_KEY`, `PORT`), CORS headers, `0.0.0.0` binding
+- [x] Render Blueprint (`render.yaml`) created with `gunicorn` WSGI setup
+- [x] Live deployment verified: `https://gnome-stocks-api.onrender.com` (Health check 200 OK, search 200 OK, Groq configured)
+- [x] Zero cold-start keep-alive workflow (`.github/workflows/keep-alive.yml`) with GitHub Secret `RENDER_API_URL` (pings every 14 min)
+
+### 4b: Namespace & Packaging ✅
+- [x] Namespace updated to `gnome-stocks@harshitworkmain`
+- [x] `metadata.json` updated with GNOME Shell 42–46 compatibility and GitHub repository URL
+- [x] `scripts/make-extension-zip.sh` created for packaging extensions.gnome.org store `.zip`
+- [x] Flatpak manifest (`io.github.harshitworkmain.GnomeStocks.yml`) created for Flathub packaging
+
+### 4c: CI/CD & Automated Releases ✅
+- [x] Automated release workflow (`.github/workflows/release.yml`) for `v*` tag pushes
+- [x] Production Release `v1.0.0` tagged, pushed, and verified live on GitHub Releases
+- [x] Release assets generated & attached: `gnome-stocks-extension-v1.0.0.zip` (11.5 KB) and `gnome-stocks-widget-v1.0.0.tar.gz` (27.2 KB)
+- [x] Git repository pushed and cleanly synced with `origin/main`
