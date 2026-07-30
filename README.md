@@ -6,7 +6,7 @@ A complete stock monitoring system for GNOME Desktop — featuring a top-bar ext
 
 ## 🚀 Live Services & Releases
 
-- **Live Cloud API Endpoint:** `https://gnome-stocks-api.onrender.com`
+- **Live Cloud API Endpoint & Dashboard:** `https://gnome-stocks-api.onrender.com`
 - **Latest Release:** [v1.0.0 on GitHub Releases](https://github.com/harshitworkmain/gnome-stocks-suite/releases/tag/v1.0.0)
   - `gnome-stocks-extension-v1.0.0.zip` (Ready for GNOME Extensions upload)
   - `gnome-stocks-widget-v1.0.0.tar.gz` (Standalone Desktop Widget & Daemon bundle)
@@ -64,7 +64,7 @@ Then restart GNOME Shell (`Alt+F2` → `r` → Enter) and enable "GNOME Stocks" 
 
 ## Cloud Deployment (Render)
 
-The API server is live on [Render](https://render.com) at `https://gnome-stocks-api.onrender.com`.
+The API server is live on [Render](https://render.com) at `https://gnome-stocks-api.onrender.com` with an interactive API landing dashboard (`GET /`).
 
 ### Setting up your own Render instance:
 
@@ -129,7 +129,8 @@ See `config.json.example` for the full template.
 
 | Endpoint | Description |
 |---|---|
-| `GET /api/health` | Server status |
+| `GET /` | Interactive API Landing Dashboard |
+| `GET /api/health` | Server status & Groq connection state |
 | `GET /api/search?q=...` | Merged search (Angel One + Yahoo) |
 | `GET /api/quote?symbol=...` | Real-time quote |
 | `GET /api/profile?symbol=...` | Company profile + stats |

@@ -1,16 +1,17 @@
-**Current Phase:** Phase 4 Complete ✅
+**Current Phase:** Phase 4 & 4.1 Complete ✅
 
 ## Overview
 A comprehensive GNOME 42–46 (Ubuntu/Linux) stock market tracking suite consisting of three primary modules:
-1. **Top Bar Extension (Phase 1 & 4):** Minimalist panel indicator with real-time updates, rotating ticker, interactive popup with autocomplete search/pin/remove, and full settings UI (`gnome-stocks@harshitworkmain`). Packaged for extensions.gnome.org.
+1. **Top Bar Extension (Phase 1 & 4):** Minimalist panel indicator with real-time updates, rotating ticker, interactive popup with autocomplete search/pin/remove, and full settings UI (`gnome-stocks@harshitworkmain`). Packaged for extensions.gnome.org (`gnome-stocks@harshitworkmain.zip`).
 2. **Desktop Widget (Phase 2 & 3):** Sophisticated desktop widget inspired by Google Finance, featuring company profiles, historical interactive charts (Lightweight Charts), global search (stocks, crypto, forex, futures), news feeds, and GNOME AI educational chat. Built with GTK3+WebKit2, powered by the local/cloud Flask API.
-3. **Stateless API Backend (Phase 3 & 4):** Centralized Python Flask daemon wrapping `yfinance`, Finnhub, Angel One SmartAPI, and Groq LPU (`llama-3.1-8b-instant`). Deployed live on Render (`https://gnome-stocks-api.onrender.com`) with zero cold-start keep-alive automation.
+3. **Stateless API Backend (Phase 3, 4 & 4.1):** Centralized Python Flask daemon wrapping `yfinance`, Finnhub, Angel One SmartAPI, and Groq LPU (`llama-3.1-8b-instant`). Deployed live on Render (`https://gnome-stocks-api.onrender.com`) featuring an interactive API Landing Dashboard at `GET /` and zero cold-start keep-alive automation.
 
 ## Features
 - **Global & Indian Market Data:** Finnhub + Yahoo Finance + Angel One SmartAPI (true real-time Nifty, Sensex, NSE/BSE stocks via `ltpData`).
 - **Universal Symbol Router:** Aliases `.NS`/`.BO` → `-EQ`, `^NSEI` → `NIFTY`.
 - **Dynamic Search Aggregator:** Merges Angel One 200k+ local indexed instruments with Yahoo Finance.
 - **GNOME AI Assistant:** Groq LPU LLM proxy for instant metric explanations with SQLite caching & conversational market context.
+- **Interactive Cloud Landing Dashboard:** `GET /` displaying live status badges, try-it symbol search, and endpoint explorer.
 - **Currency & Formatting:** `$` for USD, `₹` for INR, plain for indices (PTS).
 - **Ticker Rotation:** Configurable pinned + rotating symbols with anti-flicker debounce.
 - **Settings UI:** `prefs.js` (GTK4 Adw) — panel position, rotation interval, display toggles, compact mode.
@@ -33,5 +34,5 @@ A comprehensive GNOME 42–46 (Ubuntu/Linux) stock market tracking suite consist
 | Legacy `.NS` / `^` format | Angel One (aliased) | INR/PTS | `RELIANCE.NS` → `RELIANCE-EQ` |
 
 ## Live Deployment & Releases
-- **Live Cloud API Endpoint:** `https://gnome-stocks-api.onrender.com`
+- **Live Cloud API Endpoint & Dashboard:** `https://gnome-stocks-api.onrender.com`
 - **GitHub Release v1.0.0:** [harshitworkmain/gnome-stocks-suite Releases](https://github.com/harshitworkmain/gnome-stocks-suite/releases/tag/v1.0.0)

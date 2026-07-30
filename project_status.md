@@ -1,6 +1,6 @@
 # Project Status
 
-**Current Phase:** Phase 4 Complete ✅
+**Current Phase:** Phase 4 & 4.1 Complete ✅ (Live Cloud Deploy + Interactive API Dashboard)
 
 ## Phase 1a: Finnhub + Yahoo Daemon + Extension Refactor ✅
 ## Phase 1b: Angel One SmartAPI Integration ✅
@@ -67,7 +67,7 @@
 - [x] Dependencies pinned in `requirements.txt` (`flask`, `yfinance`, `groq`, `gunicorn`, `flask-cors`)
 - [x] `stocks-daemon/api_server.py` refactored for cloud: env vars (`GROQ_API_KEY`, `PORT`), CORS headers, `0.0.0.0` binding
 - [x] Render Blueprint (`render.yaml`) created with `gunicorn` WSGI setup
-- [x] Live deployment verified: `https://gnome-stocks-api.onrender.com` (Health check 200 OK, search 200 OK, Groq configured)
+- [x] Live deployment verified: `https://gnome-stocks-api.onrender.com` (Health check 200 OK, search 200 OK, Groq active)
 - [x] Zero cold-start keep-alive workflow (`.github/workflows/keep-alive.yml`) with GitHub Secret `RENDER_API_URL` (pings every 14 min)
 
 ### 4b: Namespace & Packaging ✅
@@ -80,4 +80,13 @@
 - [x] Automated release workflow (`.github/workflows/release.yml`) for `v*` tag pushes
 - [x] Production Release `v1.0.0` tagged, pushed, and verified live on GitHub Releases
 - [x] Release assets generated & attached: `gnome-stocks-extension-v1.0.0.zip` (11.5 KB) and `gnome-stocks-widget-v1.0.0.tar.gz` (27.2 KB)
-- [x] Git repository pushed and cleanly synced with `origin/main`
+
+---
+
+## Phase 4.1: API Root Landing Dashboard (`GET /`) ✅
+- [x] `@app.route("/")` added to `api_server.py` with Stitch MCP dark design theme
+- [x] Live animated status badge (`Online — v3.0`) and Groq AI connection status
+- [x] Interactive global symbol search box (`Try it`) with real-time JSON response viewer
+- [x] Interactive endpoint cards for all 7 GET and 1 POST endpoints
+- [x] Quick links to GitHub repository and `v1.0.0` release assets
+- [x] Deployed and verified live on Render (`https://gnome-stocks-api.onrender.com/` returns 200 OK)
