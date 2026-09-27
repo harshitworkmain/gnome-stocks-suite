@@ -1,6 +1,6 @@
 id: io.github.harshitworkmain.GnomeStocks
 runtime: org.gnome.Platform
-runtime-version: "44"
+runtime-version: "46"
 sdk: org.gnome.Sdk
 command: gnome-stocks-widget
 
@@ -19,6 +19,10 @@ modules:
       - mkdir -p /app/share/gnome-stocks-widget/web
       - cp -r gnome-stocks-widget/web/* /app/share/gnome-stocks-widget/web/
       - install -Dm644 gnome-stocks-widget/gnome-stocks-widget.desktop /app/share/applications/io.github.harshitworkmain.GnomeStocks.desktop
+      # Install desktop icon for Flathub compliance
+      - install -Dm644 gnome-stocks-widget/io.github.harshitworkmain.GnomeStocks.svg /app/share/icons/hicolor/scalable/apps/io.github.harshitworkmain.GnomeStocks.svg
+      # Install AppStream metainfo for Flathub compliance
+      - install -Dm644 io.github.harshitworkmain.GnomeStocks.metainfo.xml /app/share/metainfo/io.github.harshitworkmain.GnomeStocks.metainfo.xml
       # Patch widget.py paths for Flatpak sandbox
       - sed -i 's|SCRIPT_DIR = .*|SCRIPT_DIR = "/app/share/gnome-stocks-widget"|' /app/bin/gnome-stocks-widget
     sources:

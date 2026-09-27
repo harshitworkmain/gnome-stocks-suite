@@ -1,10 +1,14 @@
-const { GObject, St, Clutter, GLib, Gio } = imports.gi;
-const ExtensionUtils = imports.misc.extensionUtils;
-const Main = imports.ui.main;
-const PanelMenu = imports.ui.panelMenu;
+import St from 'gi://St';
+import Clutter from 'gi://Clutter';
+import GObject from 'gi://GObject';
+import GLib from 'gi://GLib';
+import Gio from 'gi://Gio';
 
-const Me = ExtensionUtils.getCurrentExtension();
-const Popup = Me.imports.popup;
+import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
+import * as Main from 'resource:///org/gnome/shell/ui/main.js';
+import * as PanelMenu from 'resource:///org/gnome/shell/ui/panelMenu.js';
+
+import { StockMenu } from './popup.js';
 
 const DATA_FILE = '/dev/shm/gnome-stocks.json';
 
@@ -40,12 +44,12 @@ function _formatPanelPrice(quote, showCurrency) {
 
 // ─── Main Indicator ─────────────────────────────────────────────────────────
 
-var StockIndicator = GObject.registerClass(
+const StockIndicator = GObject.registerClass(
 class StockIndicator extends PanelMenu.Button {
-    _init() {
+    _init(settings) {
         super._init(0.0, 'Stock Indicator');
 
-        this._settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.stocks');
+        this._settings = settings;
 
         // State
         this._state = {
@@ -71,7 +75,7 @@ class StockIndicator extends PanelMenu.Button {
         }
 
         // Popup menu
-        this._stockMenu = new Popup.StockMenu(this._settings);
+        this._stockMenu = new StockMenu(this._settings);
         this.menu.addMenuItem(this._stockMenu);
 
         // Watch the shared JSON file
@@ -162,7 +166,7 @@ class StockIndicator extends PanelMenu.Button {
                 return;
             }
 
-            let text = imports.byteArray.toString(contents);
+            let text = new TextDecoder().decode(contents);
             let payload = JSON.parse(text);
 
             // Debounce: skip if same timestamp
@@ -250,7 +254,7 @@ class StockIndicator extends PanelMenu.Button {
 
     _logDebug(msg) {
         if (this._settings.get_boolean('debug')) {
-            log('[gnome-stocks] ' + msg);
+            console.log('[gnome-stocks] ' + msg);
         }
     }
 
@@ -279,25 +283,24 @@ class StockIndicator extends PanelMenu.Button {
     }
 });
 
-let _indicator;
+// ─── Extension Entry Point ──────────────────────────────────────────────────
 
-function init() {
-    // No-op for GNOME 42
-}
+export default class StockExtension extends Extension {
+    enable() {
+        this._settings = this.getSettings('org.gnome.shell.extensions.stocks');
+        this._indicator = new StockIndicator(this._settings);
+        let position = 'right';
+        try {
+            position = this._settings.get_string('panel-position') || 'right';
+        } catch (e) { /* use default */ }
+        Main.panel.addToStatusArea('gnome-stocks-indicator', this._indicator, 0, position);
+    }
 
-function enable() {
-    _indicator = new StockIndicator();
-    let position = 'right';
-    try {
-        let settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.stocks');
-        position = settings.get_string('panel-position') || 'right';
-    } catch (e) { /* use default */ }
-    Main.panel.addToStatusArea('gnome-stocks-indicator', _indicator, 0, position);
-}
-
-function disable() {
-    if (_indicator) {
-        _indicator.destroy();
-        _indicator = null;
+    disable() {
+        if (this._indicator) {
+            this._indicator.destroy();
+            this._indicator = null;
+        }
+        this._settings = null;
     }
 }

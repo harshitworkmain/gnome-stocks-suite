@@ -1,14 +1,11 @@
-'use strict';
+import Adw from 'gi://Adw';
+import Gio from 'gi://Gio';
+import Gtk from 'gi://Gtk';
+import { ExtensionPreferences } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
-const { Adw, Gio, Gtk } = imports.gi;
-const ExtensionUtils = imports.misc.extensionUtils;
-
-function init() {
-    // No-op
-}
-
-function fillPreferencesWindow(window) {
-    const settings = ExtensionUtils.getSettings('org.gnome.shell.extensions.stocks');
+export default class StockExtensionPreferences extends ExtensionPreferences {
+    fillPreferencesWindow(window) {
+        const settings = this.getSettings('org.gnome.shell.extensions.stocks');
 
     // ── Panel Settings Page ──
     let panelPage = new Adw.PreferencesPage({ title: 'Panel', icon_name: 'display-symbolic' });
@@ -117,4 +114,5 @@ function fillPreferencesWindow(window) {
     // Add pages
     window.add(panelPage);
     window.add(displayPage);
+    }
 }

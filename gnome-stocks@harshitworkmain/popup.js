@@ -1,5 +1,9 @@
-const { St, Clutter, Gio, GLib, Soup } = imports.gi;
-const PopupMenu = imports.ui.popupMenu;
+import St from 'gi://St';
+import Clutter from 'gi://Clutter';
+import Gio from 'gi://Gio';
+import GLib from 'gi://GLib';
+import Soup from 'gi://Soup';
+import * as PopupMenu from 'resource:///org/gnome/shell/ui/popupMenu.js';
 
 const CONFIG_FILE = GLib.get_home_dir() + '/.config/gnome-stocks/config.json';
 
@@ -10,12 +14,12 @@ try {
     if (configFile.query_exists(null)) {
         let [ok, contents] = configFile.load_contents(null);
         if (ok) {
-            let cfg = JSON.parse(imports.byteArray.toString(contents));
+            let cfg = JSON.parse(new TextDecoder().decode(contents));
             if (cfg.api_url) API_URL = cfg.api_url;
         }
     }
 } catch (e) {
-    log('[gnome-stocks] Could not read api_url from config: ' + e.message);
+    console.log('[gnome-stocks] Could not read api_url from config: ' + e.message);
 }
 
 // ─── Helpers ────────────────────────────────────────────────────────────────
@@ -36,7 +40,7 @@ function _formatPrice(quote, showCurrency) {
     return price;
 }
 
-// ─── HTTP Helper (Soup 3.0 for GNOME 42+) ──────────────────────────────────
+// ─── HTTP Helper (Soup 3.0 for GNOME 45+) ──────────────────────────────────
 
 function _httpGetAsync(url, callback) {
     try {
@@ -58,28 +62,13 @@ function _httpGetAsync(url, callback) {
             }
         );
     } catch (e) {
-        // Fallback: try Soup 2.x API
-        try {
-            let session = new Soup.SessionAsync();
-            let message = Soup.Message.new('GET', url);
-            session.queue_message(message, (_session, msg) => {
-                try {
-                    let text = msg.response_body.data;
-                    let data = JSON.parse(text);
-                    callback(null, data);
-                } catch (e2) {
-                    callback(e2, null);
-                }
-            });
-        } catch (e3) {
-            callback(e3, null);
-        }
+        callback(e, null);
     }
 }
 
 // ─── Menu ───────────────────────────────────────────────────────────────────
 
-var StockMenu = class StockMenu extends PopupMenu.PopupMenuSection {
+export class StockMenu extends PopupMenu.PopupMenuSection {
     constructor(settings) {
         super();
 
@@ -276,7 +265,7 @@ var StockMenu = class StockMenu extends PopupMenu.PopupMenuSection {
             if (file.query_exists(null)) {
                 let [ok, contents] = file.load_contents(null);
                 if (ok) {
-                    let config = JSON.parse(imports.byteArray.toString(contents));
+                    let config = JSON.parse(new TextDecoder().decode(contents));
                     let symbols = config.symbols || [];
                     if (symbols.indexOf(symbol) === -1) {
                         symbols.push(symbol);
@@ -293,7 +282,7 @@ var StockMenu = class StockMenu extends PopupMenu.PopupMenuSection {
                 }
             }
         } catch (e) {
-            log('[gnome-stocks] Add symbol error: ' + e.message);
+            console.log('[gnome-stocks] Add symbol error: ' + e.message);
         }
     }
 
@@ -315,7 +304,7 @@ var StockMenu = class StockMenu extends PopupMenu.PopupMenuSection {
             if (file.query_exists(null)) {
                 let [ok, contents] = file.load_contents(null);
                 if (ok) {
-                    let config = JSON.parse(imports.byteArray.toString(contents));
+                    let config = JSON.parse(new TextDecoder().decode(contents));
                     config.symbols = (config.symbols || []).filter(s => s !== symbol);
 
                     let bytes = new GLib.Bytes(JSON.stringify(config, null, 2));
@@ -328,7 +317,7 @@ var StockMenu = class StockMenu extends PopupMenu.PopupMenuSection {
                 }
             }
         } catch (e) {
-            log('[gnome-stocks] Remove symbol error: ' + e.message);
+            console.log('[gnome-stocks] Remove symbol error: ' + e.message);
         }
     }
 
